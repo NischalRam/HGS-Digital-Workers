@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-
 import Image from "next/image";
 
 // UI components
@@ -25,7 +24,8 @@ import { createRealtimeConnection } from "./lib/realtimeConnection";
 // Agent configs
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
 
-function App() {
+// Create a wrapper component that uses searchParams
+function AppContent() {
   const searchParams = useSearchParams();
 
   const { transcriptItems, addTranscriptMessage, addTranscriptBreadcrumb } =
@@ -36,6 +36,9 @@ function App() {
   const [selectedAgentConfigSet, setSelectedAgentConfigSet] =
     useState<AgentConfig[] | null>(null);
 
+  // Rest of your component logic...
+  // (All the code that was previously in your App component)
+  
   const [dataChannel, setDataChannel] = useState<RTCDataChannel | null>(null);
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const dcRef = useRef<RTCDataChannel | null>(null);
@@ -511,6 +514,15 @@ function App() {
         setIsAudioPlaybackEnabled={setIsAudioPlaybackEnabled}
       />
     </div>
+  );
+}
+
+// Main App component that wraps the content in a Suspense boundary
+function App() {
+  return (
+    <Suspense fallback={<div className="p-5">Loading...</div>}>
+      <AppContent />
+    </Suspense>
   );
 }
 
