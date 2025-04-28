@@ -409,7 +409,7 @@ function App() {
         <div className="flex items-center">
           <div onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>
             <Image
-              src="/openai-logomark.svg"
+              src="/HGS-Logomark_Black.svg"
               alt="OpenAI Logo"
               width={20}
               height={20}
@@ -417,7 +417,7 @@ function App() {
             />
           </div>
           <div>
-            Realtime API <span className="text-gray-500">Agents</span>
+            HGS Digital <span className="text-gray-500">Workers</span>
           </div>
         </div>
         <div className="flex items-center">
