@@ -15,4 +15,4 @@ export const allAgentSets: AllAgentConfigsType = {
   harmony,
 };
 
-export const defaultAgentSetKey = "simpleExample";
+export const defaultAgentSetKey = "harmony";
