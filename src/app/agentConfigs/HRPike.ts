@@ -21,34 +21,10 @@ const n8nTool: Tool = {
     },
     required: ["sentence", "id"],
     additionalProperties: false,
-  },
-  toolLogic: async ({ sentence }: { sentence: string }) => {
-    try {
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/Balance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sentence, id: 2 }), // Always include id = 2
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to call n8n API");
-      }
-
-      const text = await response.text();
-      console.log("n8n API response (text):", text);
-      return { result: text };
-    } catch (error) {
-      console.error("Error calling n8n API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
-    }
-  },
+  }
+  // Removed toolLogic from here
 };
+
 //Second tool reques PTO
 const requestPTOTool: Tool = {
   type: "function" as const,
@@ -68,34 +44,10 @@ const requestPTOTool: Tool = {
     },
     required: ["hours", "id"],
     additionalProperties: false,
-  },
-  toolLogic: async ({ hours }: { hours: number }) => {
-    try {
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/504582e4-5d3e-42df-8f61-e851e7633041", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: 2, hours }), // Always send id: 2
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to call n8n API");
-      }
-
-      const text = await response.text();
-      console.log("PTO Request API response:", text);
-      return { result: text };
-    } catch (error) {
-      console.error("Error calling PTO request API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
-    }
-  },
+  }
+  // Removed toolLogic from here
 };
+
 //Function personal day off
 const personalDayOffHoursTool: Tool = {
   type: "function" as const,
@@ -111,33 +63,8 @@ const personalDayOffHoursTool: Tool = {
     },
     required: ["id"],
     additionalProperties: false,
-  },
-  toolLogic: async () => {
-    try {
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/Personaldays", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: 2 }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to call personal day off hours API");
-      }
-
-      const text = await response.text();
-      console.log("Personal Day Off Hours API response:", text);
-      return { result: text };
-    } catch (error) {
-      console.error("Error calling Personal Day Off Hours API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
-    }
-  },
+  }
+  // Removed toolLogic from here
 };
 
 //vacation
@@ -155,33 +82,117 @@ const vacationHoursTool: Tool = {
     },
     required: ["id"],
     additionalProperties: false,
-  },
-  toolLogic: async () => {
-    try {
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/vacation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: 2 }),
-      });
+  }
+  // Removed toolLogic from here
+};
 
-      if (!response.ok) {
-        throw new Error("Failed to call vacation hours API");
-      }
+// Define all the implementation logic
+const n8nToolLogic = async ({ sentence }: { sentence: string }) => {
+  try {
+    const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/Balance", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sentence, id: 2 }), // Always include id = 2
+    });
 
-      const text = await response.text();
-      console.log("Vacation Hours API response:", text);
-      return { result: text };
-    } catch (error) {
-      console.error("Error calling Vacation Hours API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
+    if (!response.ok) {
+      throw new Error("Failed to call n8n API");
     }
-  },
+
+    const text = await response.text();
+    console.log("n8n API response (text):", text);
+    return { result: text };
+  } catch (error) {
+    console.error("Error calling n8n API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
+};
+
+const requestPTOToolLogic = async ({ hours }: { hours: number }) => {
+  try {
+    const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/504582e4-5d3e-42df-8f61-e851e7633041", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: 2, hours }), // Always send id: 2
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to call n8n API");
+    }
+
+    const text = await response.text();
+    console.log("PTO Request API response:", text);
+    return { result: text };
+  } catch (error) {
+    console.error("Error calling PTO request API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
+};
+
+const personalDayOffHoursToolLogic = async () => {
+  try {
+    const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/Personaldays", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: 2 }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to call personal day off hours API");
+    }
+
+    const text = await response.text();
+    console.log("Personal Day Off Hours API response:", text);
+    return { result: text };
+  } catch (error) {
+    console.error("Error calling Personal Day Off Hours API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
+};
+
+const vacationHoursToolLogic = async () => {
+  try {
+    const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/vacation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: 2 }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to call vacation hours API");
+    }
+
+    const text = await response.text();
+    console.log("Vacation Hours API response:", text);
+    return { result: text };
+  } catch (error) {
+    console.error("Error calling Vacation Hours API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
 };
 
 const harmony: AgentConfig = {
@@ -221,15 +232,14 @@ You are Harmony, a professional, courteous, and helpful HR assistant. Your main 
 
 Stay polite, professional, and efficient. Use a helpful tone, and ensure the user feels supported throughout the process.
   `,
-  tools: [n8nTool, requestPTOTool, personalDayOffHoursTool, vacationHoursTool], // Add the new tool here
-    toolLogic: {
-      n8n: n8nTool.toolLogic,
-      requestPTO: requestPTOTool.toolLogic,
-      personalDayOffHours: personalDayOffHoursTool.toolLogic,
-      vacationHours: vacationHoursTool.toolLogic,
-    },
-  };
-  
+  tools: [n8nTool, requestPTOTool, personalDayOffHoursTool, vacationHoursTool], // Added all tools here
+  toolLogic: {
+    n8n: n8nToolLogic,
+    requestPTO: requestPTOToolLogic,
+    personalDayOffHours: personalDayOffHoursToolLogic,
+    vacationHours: vacationHoursToolLogic,
+  },
+};
 
 const agents = injectTransferTools([harmony]);
 export default agents;
