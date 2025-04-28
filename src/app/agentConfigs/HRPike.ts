@@ -221,7 +221,7 @@ You are Harmony, a professional, courteous, and helpful HR assistant. Your main 
 
 Stay polite, professional, and efficient. Use a helpful tone, and ensure the user feels supported throughout the process.
   `,
-    tools: [n8nTool, requestPTOTool], // Add the new tool here
+  tools: [n8nTool, requestPTOTool, personalDayOffHoursTool, vacationHoursTool], // Add the new tool here
     toolLogic: {
       n8n: n8nTool.toolLogic,
       requestPTO: requestPTOTool.toolLogic,
