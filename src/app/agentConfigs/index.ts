@@ -4,7 +4,7 @@ import customerServiceRetail from "./customerServiceRetail";
 import simpleExample from "./simpleExample";
 import jarvis from "./jarvis";
 import friday from "./TravelAgent"
-
+import harmony from "./HRPike"
 
 export const allAgentSets: AllAgentConfigsType = {
   frontDeskAuthentication,
@@ -12,6 +12,7 @@ export const allAgentSets: AllAgentConfigsType = {
   simpleExample,
   jarvis,
   friday,
+  harmony,
 };
 
 export const defaultAgentSetKey = "simpleExample";
