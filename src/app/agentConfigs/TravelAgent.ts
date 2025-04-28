@@ -49,46 +49,48 @@ const n8nTool: Tool = {
       "activities",
     ],
     additionalProperties: false,
-  },
-  // This toolLogic function makes the API call to n8n and returns the response
-  toolLogic: async (params: {
-    email: string;
-    starting_from: string;
-    destination: string;
-    travelers: string;
-    departure_date: string;
-    return_date: string;
-    activities: string;
-  }) => {
-    try {
-      console.log("Sending travel details to n8n:", params);
-      
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/8963c7da-c8e4-4ba4-b787-85541088e533", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(params),
-      });
+  }
+  // Removed toolLogic from here
+};
 
-      if (!response.ok) {
-        throw new Error(`Failed to call n8n API: ${response.status} ${response.statusText}`);
-      }
+// Define the implementation logic separately
+const n8nToolLogic = async (params: {
+  email: string;
+  starting_from: string;
+  destination: string;
+  travelers: string;
+  departure_date: string;
+  return_date: string;
+  activities: string;
+}) => {
+  try {
+    console.log("Sending travel details to n8n:", params);
+    
+    const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/8963c7da-c8e4-4ba4-b787-85541088e533", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
 
-      // Always read as text since n8n returns plain text
-      const text = await response.text();
-      console.log("n8n API response (text):", text);
-      return { result: text }; // Wrap text in an object
-
-    } catch (error) {
-      console.error("Error calling n8n API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
+    if (!response.ok) {
+      throw new Error(`Failed to call n8n API: ${response.status} ${response.statusText}`);
     }
-  },
+
+    // Always read as text since n8n returns plain text
+    const text = await response.text();
+    console.log("n8n API response (text):", text);
+    return { result: text }; // Wrap text in an object
+
+  } catch (error) {
+    console.error("Error calling n8n API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
 };
 
 const friday: AgentConfig = {
@@ -141,7 +143,7 @@ When a user wants to make a new travel plan, collect ALL of the following requir
 `,
   tools: [n8nTool],
   toolLogic: {
-    n8n: n8nTool.toolLogic, // Connect toolLogic to the tool
+    n8n: n8nToolLogic, // Connect to the implementation function
   },
 };
 
