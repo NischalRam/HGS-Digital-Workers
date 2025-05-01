@@ -8,7 +8,6 @@ function Call({ }) {
     return (
         <div className="items-center justify-center overflow-hidden w-full h-full scale-spring"
             style={{
-                filter: `hue-rotate(180deg) saturate(150%) brightness(110%)`,
                 transform: "scale(0.9)"
             }}
         >

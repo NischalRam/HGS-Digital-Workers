@@ -17,7 +17,7 @@ const PerlinSphere = ({ }) => {
 
     return (
         <mesh>
-            <icosahedronGeometry args={[1, 64]} />
+            <icosahedronGeometry args={[1, 128]} />
             {/* @ts-expect-error - Already declared in types.ts. For some reason not getting picked up by lint*/}
             <perlinMaterial ref={materialRef} />
         </mesh>

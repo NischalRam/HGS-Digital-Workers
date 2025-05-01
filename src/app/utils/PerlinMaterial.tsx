@@ -5,12 +5,19 @@ import { extend } from '@react-three/fiber';
 const PerlinMaterial = shaderMaterial(
     // Uniforms
     {
-        uTime: 0
+        uTime: 0,
+        lightPosition: new THREE.Vector3(-10, -10, -5),
+        lightColor: new THREE.Vector3(1, 1, 1),
+        lightIntensity: 0.5
     },
     // Vertex shader
     `
     uniform float uTime;
     varying float vDisplacement;
+
+    varying vec3 vNormal;
+    varying vec3 vPosition;
+    varying vec2 vUv;
     
     //	Classic Perlin 3D Noise 
     //	by Stefan Gustavson
@@ -111,10 +118,14 @@ const PerlinMaterial = shaderMaterial(
         float pattern = wave(noisePattern);
         
         vDisplacement = pattern;
-        float displacement = vDisplacement / 3.0;
+        float displacement = vDisplacement / 5.0;
         
         // Apply the displacement
         vec3 newPosition = position + normal * displacement;
+        
+        vNormal = normalMatrix * normal; // Normal in view space
+        vPosition = (modelViewMatrix * vec4(newPosition, 1.0)).xyz; // Position in view space
+        vUv = uv; // Pass UV coordinates
         
         gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
     }
@@ -123,16 +134,64 @@ const PerlinMaterial = shaderMaterial(
     `
     uniform float uTime;
     varying float vDisplacement;
+
+    varying vec3 vNormal;
+    varying vec3 vPosition;
+    varying vec2 vUv;
+
+    uniform vec3 lightPosition; // Position of the light in world space
+    uniform vec3 lightColor; // Color of the light
+    uniform float lightIntensity; // Intensity of the light
+
+    vec3 perturbNormalArb(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection) {
+        vec3 vSigmaX = dFdx(surf_pos.xyz);
+        vec3 vSigmaY = dFdy(surf_pos.xyz);
+        vec3 vN = surf_norm; // normalized
+        vec3 R1 = cross(vSigmaY, vN);
+        vec3 R2 = cross(vN, vSigmaX);
+        float fDet = dot(vSigmaX, R1) * faceDirection;
+        vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
+        return normalize(abs(fDet) * surf_norm - vGrad);
+    }
     
     void main() {
-        gl_FragColor = vec4(vec3(0.1, 0.3, 0.8), 1.0);
-
+        // Calculate the derivatives of the displacement for normal map
+        vec2 dHdxy = vec2(
+            dFdx(vDisplacement) * 0.5,
+            dFdy(vDisplacement) * 0.5
+        );
+        
+        // Perturb the normal based on displacement map
+        vec3 normal = perturbNormalArb(vPosition, normalize(vNormal), dHdxy, 1.0);
+        
+        // Calculate light direction
+        vec3 lightDir = normalize(lightPosition - vPosition);
+        
+        // Basic diffuse lighting
+        float diff = max(dot(normal, lightDir), 0.0);
+        
+        // Base color 
+        vec3 baseColor = vec3(0.1, 0.3, 0.8);
+        
+        // Apply lighting to color
+        vec3 diffuse = lightColor * baseColor * diff * lightIntensity;
+        
+        // Add ambient light
+        vec3 ambient = baseColor * 0.2;
+        
+        // Final color
+        vec3 finalColor = ambient + diffuse;
+        
+        gl_FragColor = vec4(finalColor, 1.0);
     }
     `
 );
 
 export type PerlinMaterialImpl = {
     uTime: number;
+    lightPosition: THREE.Vector3;
+    lightColor: THREE.Vector3;
+    lightIntensity: number;
 } & THREE.ShaderMaterial;
 
 extend({ PerlinMaterial });
