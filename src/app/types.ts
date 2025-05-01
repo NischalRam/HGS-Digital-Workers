@@ -1,3 +1,5 @@
+import { PerlinMaterialImpl } from './utils/PerlinMaterial';
+
 export type SessionStatus = "DISCONNECTED" | "CONNECTING" | "CONNECTED";
 
 export interface ToolParameterProperty {
@@ -105,4 +107,15 @@ export interface LoggedEvent {
   timestamp: string;
   eventName: string;
   eventData: Record<string, any>; // can have arbitrary objects logged
+}
+
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      perlinMaterial: Partial<PerlinMaterialImpl> & {
+        ref?: React.RefObject<PerlinMaterialImpl>;
+      }
+    }
+  }
 }

@@ -6,11 +6,14 @@ import { LoggedEvent } from "@/app/types";
 
 export interface EventsProps {
   isExpanded: boolean;
+  width?: string;
+  height?: string;
 }
 
-function Events({ isExpanded }: EventsProps) {
+function Events({ isExpanded, width = "", height = "" }: EventsProps) {
   const [prevEventLogs, setPrevEventLogs] = useState<LoggedEvent[]>([]);
   const eventLogsContainerRef = useRef<HTMLDivElement | null>(null);
+
 
   const { loggedEvents, toggleExpand } = useEvent();
 
@@ -31,12 +34,17 @@ function Events({ isExpanded }: EventsProps) {
     setPrevEventLogs(loggedEvents);
   }, [loggedEvents, isExpanded]);
 
+
   return (
     <div
       className={
         (isExpanded ? "w-1/2 overflow-auto" : "w-0 overflow-hidden opacity-0") +
         " transition-all rounded-xl duration-200 ease-in-out flex flex-col bg-white"
       }
+      style={{
+        ...(width != "" ? { width: width } : {}),
+        ...(height != "" ? { height: height } : {})
+      }}
       ref={eventLogsContainerRef}
     >
       {isExpanded && (
@@ -65,7 +73,7 @@ function Events({ isExpanded }: EventsProps) {
                         style={{ color: arrowInfo.color }}
                         className="ml-1 mr-2"
                       >
-                      {arrowInfo.symbol}
+                        {arrowInfo.symbol}
                       </span>
                       <span
                         className={
