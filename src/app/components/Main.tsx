@@ -496,49 +496,55 @@ function Main({ setUseLegacy }: MainProps) {
                     )}
                 </div>
             </div>
-            <div className="grid grid-cols-12 gap-2" style={{ height: "83%" }}>
-                <div className={
-                    `${isTranscriptExpanded || isEventsPaneExpanded ? "col-span-6" : "col-span-12"} flex items-center justify-center overflow-hidden`
-                }
-                    style={{ height: "100%" }}
+            <div className="flex gap-2" style={{ height: "83%" }}>
+                <div
+                    className="flex items-center justify-center overflow-hidden"
+                    style={{
+                        height: "100%",
+                        width: isTranscriptExpanded || isEventsPaneExpanded ? "50%" : "100%"
+                    }}
                 >
-                    <DeviceFrameset device="iPhone X" color="black" zoom={0.8}>
+                    <DeviceFrameset device="iPhone X" color="black" zoom={0.79}>
                         <Call />
                     </DeviceFrameset>
                 </div>
-                {isTranscriptExpanded || isEventsPaneExpanded ?
-                    <div className="col-span-6" style={{ height: "100%" }}>
-                        <div className="flex flex-col gap-2" style={{ height: "100%" }}>
-                            {isTranscriptExpanded ?
-                                <div className="px-2 overflow-hidden relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%" }}>
-                                    <Transcript
-                                        userText={userText}
-                                        setUserText={setUserText}
-                                        onSendMessage={handleSendTextMessage}
-                                        canSend={
-                                            sessionStatus === "CONNECTED" &&
-                                            dcRef.current?.readyState === "open"
-                                        }
-                                        minHeight="100%"
-                                    />
-                                </div>
-                                : <></>
-                            }
+                <div
+                    className="overflow-hidden"
+                    style={{
+                        height: "100%",
+                        width: isTranscriptExpanded || isEventsPaneExpanded ? "50%" : "0%",
+                        opacity: isTranscriptExpanded || isEventsPaneExpanded ? 1 : 0
+                    }}
+                >
+                    <div className="flex flex-col gap-2" style={{ height: "100%" }}>
+                        {isTranscriptExpanded ?
+                            <div className="px-2 overflow-hidden relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%" }}>
+                                <Transcript
+                                    userText={userText}
+                                    setUserText={setUserText}
+                                    onSendMessage={handleSendTextMessage}
+                                    canSend={
+                                        sessionStatus === "CONNECTED" &&
+                                        dcRef.current?.readyState === "open"
+                                    }
+                                    minHeight="100%"
+                                />
+                            </div>
+                            : <></>
+                        }
 
-                            {isEventsPaneExpanded ?
-                                <div className="px-2 overflow-hidden relative" style={{ height: isTranscriptExpanded ? "35%" : "100%" }}>
-                                    <Events
-                                        isExpanded={isEventsPaneExpanded}
-                                        width="100%"
-                                        height="100%"
-                                    />
-                                </div>
-                                : <></>
-                            }
-                        </div>
+                        {isEventsPaneExpanded ?
+                            <div className="px-2 overflow-hidden relative" style={{ height: isTranscriptExpanded ? "35%" : "100%" }}>
+                                <Events
+                                    isExpanded={isEventsPaneExpanded}
+                                    width="100%"
+                                    height="100%"
+                                />
+                            </div>
+                            : <></>
+                        }
                     </div>
-                    : <></>
-                }
+                </div>
             </div>
 
             <BottomToolbar
@@ -550,7 +556,7 @@ function Main({ setUseLegacy }: MainProps) {
                 handleTalkButtonDown={handleTalkButtonDown}
                 handleTalkButtonUp={handleTalkButtonUp}
                 isTranscriptExpanded={isTranscriptExpanded}
-                setIsTranscriptExpaned={setIsTranscriptExanded}
+                setIsTranscriptExpanded={setIsTranscriptExanded}
                 isEventsPaneExpanded={isEventsPaneExpanded}
                 setIsEventsPaneExpanded={setIsEventsPaneExpanded}
                 isAudioPlaybackEnabled={isAudioPlaybackEnabled}

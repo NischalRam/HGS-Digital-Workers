@@ -3,7 +3,7 @@ import { SessionStatus } from "@/app/types";
 
 interface SimpleToolbarProps {
   isTranscriptExpanded?: boolean;
-  setIsTranscriptExpaned?: (val: boolean) => void;
+  setIsTranscriptExpanded?: (val: boolean) => void;
   isEventsPaneExpanded: boolean;
   setIsEventsPaneExpanded: (val: boolean) => void;
 }
@@ -37,7 +37,7 @@ function LegacyToolBar({
   isAudioPlaybackEnabled,
   setIsAudioPlaybackEnabled,
   isTranscriptExpanded = true,
-  setIsTranscriptExpaned = () => { },
+  setIsTranscriptExpanded = () => { },
 }: CompleteToolbarProps) {
   const isConnected = sessionStatus === "CONNECTED";
   const isConnecting = sessionStatus === "CONNECTING";
@@ -130,14 +130,14 @@ function LegacyToolBar({
 
 function ToolBar({
   isTranscriptExpanded = true,
-  setIsTranscriptExpaned,
+  setIsTranscriptExpanded,
   isEventsPaneExpanded,
   setIsEventsPaneExpanded,
 }: SimpleToolbarProps) {
   return (
     <div className="p-4 flex flex-row items-center justify-center gap-x-8">
       <button
-        onClick={() => setIsTranscriptExpaned(!isTranscriptExpanded)}
+        onClick={() => setIsTranscriptExpanded(!isTranscriptExpanded)}
         className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
         style={{ borderRadius: "0.5rem" }}
       >
@@ -169,7 +169,7 @@ function BottomToolbar({
   setIsAudioPlaybackEnabled,
   legacy = false,
   isTranscriptExpanded = true,
-  setIsTranscriptExpaned = () => { },
+  setIsTranscriptExpanded = () => { },
 }: BottomToolbarProps) {
   return legacy ?
     <LegacyToolBar
@@ -188,7 +188,7 @@ function BottomToolbar({
     :
     <ToolBar
       isTranscriptExpanded={isTranscriptExpanded}
-      setIsTranscriptExpaned={setIsTranscriptExpaned}
+      setIsTranscriptExpanded={setIsTranscriptExpanded}
       isEventsPaneExpanded={isEventsPaneExpanded}
       setIsEventsPaneExpanded={setIsEventsPaneExpanded}
     />
