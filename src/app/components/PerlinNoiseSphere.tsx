@@ -6,12 +6,7 @@ import { PerlinMaterial, PerlinMaterialImpl } from '../utils/PerlinMaterial';
 // TODO: Find out why the extend is not working from PerlinMaterial.tsx
 extend({ PerlinMaterial })
 
-interface PerlinSphereProps {
-    width: number,
-    height: number
-}
-
-const PerlinSphere = ({ width, height }: PerlinSphereProps) => {
+const PerlinSphere = ({ }) => {
     const materialRef = useRef<PerlinMaterialImpl>(null);
 
     useFrame(({ clock }) => {
@@ -23,6 +18,7 @@ const PerlinSphere = ({ width, height }: PerlinSphereProps) => {
     return (
         <mesh>
             <icosahedronGeometry args={[1, 64]} />
+            {/* @ts-expect-error - Already declared in types.ts. For some reason not getting picked up by lint*/}
             <perlinMaterial ref={materialRef} />
         </mesh>
     );

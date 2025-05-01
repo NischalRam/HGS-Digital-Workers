@@ -36,8 +36,6 @@ function LegacyToolBar({
   setIsEventsPaneExpanded,
   isAudioPlaybackEnabled,
   setIsAudioPlaybackEnabled,
-  isTranscriptExpanded = true,
-  setIsTranscriptExpanded = () => { },
 }: CompleteToolbarProps) {
   const isConnected = sessionStatus === "CONNECTED";
   const isConnecting = sessionStatus === "CONNECTING";
@@ -130,7 +128,7 @@ function LegacyToolBar({
 
 function ToolBar({
   isTranscriptExpanded = true,
-  setIsTranscriptExpanded,
+  setIsTranscriptExpanded = () => { },
   isEventsPaneExpanded,
   setIsEventsPaneExpanded,
 }: SimpleToolbarProps) {
