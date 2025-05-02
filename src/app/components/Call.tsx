@@ -141,7 +141,6 @@ const Call = memo(function Call({
                 <h2
                     className="text-4xl font-bold tracking-wide"
                     style={{
-                        color: "#d85b74",
                         ...(fontColor != "" ? { color: fontColor } : { color: "#2A3B8F" }),
                         textShadow: "0px 1px 2px rgba(0,0,0,0.1)",
                         fontFamily: "'Montserrat', sans-serif",
