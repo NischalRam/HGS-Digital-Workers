@@ -178,9 +178,19 @@ const PerlinMaterial = shaderMaterial(
         
         // Add ambient light
         vec3 ambient = baseColor * 0.2;
-        
+
+        // Add rim lighting
+        vec3 viewDir = normalize(-vPosition);
+        float rim = 1.0 - max(dot(viewDir, normal), 0.0);
+        rim = pow(rim, 5.0);
+        rim = smoothstep(0.7, 0.95, rim); 
+
+        // Make the rim light change subtly with time
+        vec3 rimColor = vec3(0.9, 0.2, 0.3) * sin(uTime * 0.5) * 0.5 + 0.5;
+        vec3 rimLight = rimColor * rim * 0.7;
+            
         // Final color
-        vec3 finalColor = ambient + diffuse;
+        vec3 finalColor = ambient + diffuse + rimLight;
         
         gl_FragColor = vec4(finalColor, 1.0);
     }

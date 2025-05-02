@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, memo } from "react"
+import React, { useEffect, useRef, memo, useState } from "react"
 import PerlinSphere from "./PerlinNoiseSphere";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { MicOff, Mic, Phone, PhoneOff } from "lucide-react"
 import { Center } from "@react-three/drei";
 import { SessionStatus } from "@/app/types";
+import agentMappings from "../data/agentMappings"
 
 interface CallProps {
     agentName: string;
@@ -23,6 +24,10 @@ const Call = memo(function Call({
 }: CallProps) {
     const containerRef = useRef(null);
 
+    const [fontColor, setFontColor] = useState("")
+    const [filter, setFilter] = useState("")
+
+
     // Force canvas to properly resize with container
     useEffect(() => {
         if (!containerRef.current) return;
@@ -35,6 +40,20 @@ const Call = memo(function Call({
         resizeObserver.observe(containerRef.current);
         return () => resizeObserver.disconnect();
     }, []);
+
+    useEffect(() => {
+        if (agentMappings.hasOwnProperty(agentName.toLowerCase())) {
+            setFontColor(agentMappings[agentName.toLowerCase()].fontColor)
+            setFilter(agentMappings[agentName.toLowerCase()].filter)
+            console.log("Font color:", agentMappings[agentName.toLowerCase()].fontColor)
+            console.log("Filter color:", agentMappings[agentName.toLowerCase()].filter)
+        }
+        else {
+            setFontColor("")
+            setFilter("")
+        }
+    }, [agentName])
+
     return (
         <>
             <div className="items-center justify-center overflow-hidden w-full h-full"
@@ -48,7 +67,7 @@ const Call = memo(function Call({
                 <div
                     className="scaleSpring"
                     style={{
-                        filter: `hue-rotate(120deg) saturate(100%) brightness(110%)`,
+                        ...(filter != "" ? { filter: filter } : {}),
                         height: "90%",
                     }}
                 >
@@ -123,6 +142,7 @@ const Call = memo(function Call({
                     className="text-4xl font-bold tracking-wide"
                     style={{
                         color: "#d85b74",
+                        ...(fontColor != "" ? { color: fontColor } : { color: "#2A3B8F" }),
                         textShadow: "0px 1px 2px rgba(0,0,0,0.1)",
                         fontFamily: "'Montserrat', sans-serif",
                         letterSpacing: "0.5px",

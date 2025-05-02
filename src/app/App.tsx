@@ -10,10 +10,7 @@ import 'react-device-frameset/styles/device-selector.min.css'
 
 // Create a wrapper component that uses searchParams
 function AppContent() {
-  const [useLegacy, setUseLegacy] = useState(() => {
-    const stored = localStorage.getItem('useLegacyUI')
-    return stored ? JSON.parse(stored) : false
-  })
+  const [useLegacy, setUseLegacy] = useState(false)
 
   useEffect(() => {
     localStorage.setItem('useLegacyUI', JSON.stringify(useLegacy))
