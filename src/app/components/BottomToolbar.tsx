@@ -133,7 +133,7 @@ function ToolBar({
   setIsEventsPaneExpanded,
 }: SimpleToolbarProps) {
   return (
-    <div className="p-4 flex flex-row items-center justify-center gap-x-8">
+    <div className="p-4 flex flex-row items-center justify-center gap-2">
       <button
         onClick={() => setIsTranscriptExpanded(!isTranscriptExpanded)}
         className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"

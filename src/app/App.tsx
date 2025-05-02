@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import LegacyMain from "./components/legacyMain";
 import Main from "./components/Main";
 
@@ -10,12 +10,23 @@ import 'react-device-frameset/styles/device-selector.min.css'
 
 // Create a wrapper component that uses searchParams
 function AppContent() {
-  const [useLegacy, setUseLegacy] = useState(true)
+  const [useLegacy, setUseLegacy] = useState(() => {
+    const stored = localStorage.getItem('useLegacyUI')
+    return stored ? JSON.parse(stored) : false
+  })
+
+  useEffect(() => {
+    localStorage.setItem('useLegacyUI', JSON.stringify(useLegacy))
+  }, [useLegacy])
+
+  const toggleLegacy = useCallback(() => {
+    setUseLegacy((prev: boolean) => !prev)
+  }, [])
 
   return useLegacy ? (
-    <LegacyMain setUseLegacy={() => { setUseLegacy(!useLegacy) }} />
+    <LegacyMain setUseLegacy={toggleLegacy} />
   ) : (
-    <Main setUseLegacy={() => { setUseLegacy(!useLegacy) }} />
+    <Main setUseLegacy={toggleLegacy} />
   )
 
 }

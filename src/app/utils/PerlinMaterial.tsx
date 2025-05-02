@@ -108,7 +108,7 @@ const PerlinMaterial = shaderMaterial(
     }
     
     float wave(vec3 position) {
-        return fit(smoothMod(position.y * 6.0, 1.0, 1.5), 0.35, 0.6, 0.0, 1.0);
+        return fit(smoothMod(position.y * 3.5, 1.0, 1.5), 0.35, 0.6, 0.0, 1.0);
     }
     
     void main() {

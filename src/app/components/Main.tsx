@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
@@ -505,7 +504,13 @@ function Main({ setUseLegacy }: MainProps) {
                     }}
                 >
                     <DeviceFrameset device="iPhone X" color="black" zoom={0.79}>
-                        <Call />
+                        <Call
+                            agentName={selectedAgentName}
+                            sessionStatus={sessionStatus}
+                            onToggleConnection={onToggleConnection}
+                            isPTTActive={isPTTActive}
+                            setIsPTTActive={setIsPTTActive}
+                        />
                     </DeviceFrameset>
                 </div>
                 <div
