@@ -27,7 +27,6 @@ const Call = memo(function Call({
     const [fontColor, setFontColor] = useState("")
     const [filter, setFilter] = useState("")
 
-
     // Force canvas to properly resize with container
     useEffect(() => {
         if (!containerRef.current) return;
@@ -117,13 +116,13 @@ const Call = memo(function Call({
 
                     {/* Mic Button (Right) */}
                     <button
-                        className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${!isPTTActive
+                        className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 ${isPTTActive
                             ? "bg-red-500 hover:bg-red-600"
                             : "bg-green-500 hover:bg-green-600"
                             }`}
                         onClick={() => setIsPTTActive(!isPTTActive)}
                     >
-                        {!isPTTActive ? (
+                        {isPTTActive ? (
                             <MicOff className="text-white" size={24} />
                         ) : (
                             <Mic className="text-white" size={24} />
