@@ -50,7 +50,7 @@ function Main({ setUseLegacy }: MainProps) {
         useState<SessionStatus>("DISCONNECTED");
 
 
-    const [isTranscriptExpanded, setIsTranscriptExanded] = useState<boolean>(true);
+    const [isTranscriptExpanded, setIsTranscriptExanded] = useState<boolean>(false);
     const [isEventsPaneExpanded, setIsEventsPaneExpanded] =
         useState<boolean>(true);
     const [userText, setUserText] = useState<string>("");
@@ -458,7 +458,7 @@ function Main({ setUseLegacy }: MainProps) {
     const agentSetKey = searchParams.get("agentConfig") || "default";
 
     return (
-        <div className="text-base flex flex-col h-screen bg-gray-100 text-gray-800 relative">
+        <div className="text-base flex flex-col h-screen bg-gray-100 text-gray-800 relative" style={{ overflowY: "hidden" }}>
             <div className="p-5 text-lg font-semibold flex justify-between items-center">
                 <div className="flex items-center">
                     <div onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>
@@ -599,7 +599,7 @@ function Main({ setUseLegacy }: MainProps) {
                         }
 
                         {isEventsPaneExpanded ?
-                            <div className="px-2 overflow-hidden relative" style={{ height: isTranscriptExpanded ? "35%" : "100%" }}>
+                            <div className="px-2 relative" style={{ height: isTranscriptExpanded ? "35%" : "100%", overflowY: "scroll" }}>
                                 <Events
                                     isExpanded={isEventsPaneExpanded}
                                     width="100%"
