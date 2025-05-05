@@ -11,6 +11,7 @@ export interface TranscriptProps {
   setUserText: (val: string) => void;
   onSendMessage: () => void;
   canSend: boolean;
+  minHeight?: string;
 }
 
 function Transcript({
@@ -18,6 +19,7 @@ function Transcript({
   setUserText,
   onSendMessage,
   canSend,
+  minHeight = ""
 }: TranscriptProps) {
   const { transcriptItems, toggleTranscriptItemExpand } = useTranscript();
   const transcriptRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +69,7 @@ function Transcript({
   };
 
   return (
-    <div className="flex flex-col flex-1 bg-white min-h-0 rounded-xl">
+    <div className="flex flex-col flex-1 bg-white min-h-0 rounded-xl" style={minHeight != "" ? { minHeight: minHeight } : {}}>
       <div className="relative flex-1 min-h-0">
         <button
           onClick={handleCopyTranscript}
@@ -116,16 +118,14 @@ function Transcript({
                 >
                   <span className="text-xs font-mono">{timestamp}</span>
                   <div
-                    className={`whitespace-pre-wrap flex items-center font-mono text-sm text-gray-800 ${
-                      data ? "cursor-pointer" : ""
-                    }`}
+                    className={`whitespace-pre-wrap flex items-center font-mono text-sm text-gray-800 ${data ? "cursor-pointer" : ""
+                      }`}
                     onClick={() => data && toggleTranscriptItemExpand(itemId)}
                   >
                     {data && (
                       <span
-                        className={`text-gray-400 mr-1 transform transition-transform duration-200 select-none font-mono ${
-                          expanded ? "rotate-90" : "rotate-0"
-                        }`}
+                        className={`text-gray-400 mr-1 transform transition-transform duration-200 select-none font-mono ${expanded ? "rotate-90" : "rotate-0"
+                          }`}
                       >
                         ▶
                       </span>
