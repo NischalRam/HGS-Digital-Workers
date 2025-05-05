@@ -9,11 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^10.0.7",
+    "@react-three/fiber": "^9.1.2",
+    "@react-three/postprocessing": "^3.0.4",
+    "@types/three": "^0.176.0",
+    "lucide-react": "^0.503.0",
+    "motion": "^12.9.4",
     "next": "15.1.4",
     "openai": "^4.77.3",
     "react": "^19.0.0",
+    "react-device-frameset": "^1.3.4",
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.3",
+    "react-three": "^0.9.7",
+    "three": "^0.176.0",
     "uuid": "^11.0.4"
   },
   "devDependencies": {
@@ -24,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "postcss": "^8",
+    "raw-loader": "^4.0.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

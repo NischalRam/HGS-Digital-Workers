@@ -1,21 +1,30 @@
 import React from "react";
 import { SessionStatus } from "@/app/types";
 
-interface BottomToolbarProps {
+interface SimpleToolbarProps {
+  isTranscriptExpanded?: boolean;
+  setIsTranscriptExpanded?: (val: boolean) => void;
+  isEventsPaneExpanded: boolean;
+  setIsEventsPaneExpanded: (val: boolean) => void;
+}
+
+interface CompleteToolbarProps extends SimpleToolbarProps {
   sessionStatus: SessionStatus;
   onToggleConnection: () => void;
   isPTTActive: boolean;
   setIsPTTActive: (val: boolean) => void;
   isPTTUserSpeaking: boolean;
-  handleTalkButtonDown: () => void;
-  handleTalkButtonUp: () => void;
-  isEventsPaneExpanded: boolean;
-  setIsEventsPaneExpanded: (val: boolean) => void;
+  handleTalkButtonDown?: () => void;
+  handleTalkButtonUp?: () => void;
   isAudioPlaybackEnabled: boolean;
   setIsAudioPlaybackEnabled: (val: boolean) => void;
 }
 
-function BottomToolbar({
+interface BottomToolbarProps extends CompleteToolbarProps {
+  legacy: boolean;
+}
+
+function LegacyToolBar({
   sessionStatus,
   onToggleConnection,
   isPTTActive,
@@ -27,7 +36,7 @@ function BottomToolbar({
   setIsEventsPaneExpanded,
   isAudioPlaybackEnabled,
   setIsAudioPlaybackEnabled,
-}: BottomToolbarProps) {
+}: CompleteToolbarProps) {
   const isConnected = sessionStatus === "CONNECTED";
   const isConnecting = sessionStatus === "CONNECTING";
 
@@ -115,6 +124,73 @@ function BottomToolbar({
       </div>
     </div>
   );
+}
+
+function ToolBar({
+  isTranscriptExpanded = true,
+  setIsTranscriptExpanded = () => { },
+  isEventsPaneExpanded,
+  setIsEventsPaneExpanded,
+}: SimpleToolbarProps) {
+  return (
+    <div className="p-4 flex flex-row items-center justify-center gap-2">
+      <button
+        onClick={() => setIsTranscriptExpanded(!isTranscriptExpanded)}
+        className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+        style={{ borderRadius: "0.5rem" }}
+      >
+        {isTranscriptExpanded ? "Disable" : "Enable"} Transcript
+      </button>
+
+      <button
+        onClick={() => setIsEventsPaneExpanded(!isEventsPaneExpanded)}
+        className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+        style={{ borderRadius: "0.5rem" }}
+      >
+        {isEventsPaneExpanded ? "Disable" : "Enable"} Events
+      </button>
+    </div>
+  )
+}
+
+function BottomToolbar({
+  sessionStatus,
+  onToggleConnection,
+  isPTTActive,
+  setIsPTTActive,
+  isPTTUserSpeaking,
+  handleTalkButtonDown,
+  handleTalkButtonUp,
+  isEventsPaneExpanded,
+  setIsEventsPaneExpanded,
+  isAudioPlaybackEnabled,
+  setIsAudioPlaybackEnabled,
+  legacy = false,
+  isTranscriptExpanded = true,
+  setIsTranscriptExpanded = () => { },
+}: BottomToolbarProps) {
+  return legacy ?
+    <LegacyToolBar
+      sessionStatus={sessionStatus}
+      onToggleConnection={onToggleConnection}
+      isPTTActive={isPTTActive}
+      setIsPTTActive={setIsPTTActive}
+      isPTTUserSpeaking={isPTTUserSpeaking}
+      handleTalkButtonDown={handleTalkButtonDown}
+      handleTalkButtonUp={handleTalkButtonUp}
+      isEventsPaneExpanded={isEventsPaneExpanded}
+      setIsEventsPaneExpanded={setIsEventsPaneExpanded}
+      isAudioPlaybackEnabled={isAudioPlaybackEnabled}
+      setIsAudioPlaybackEnabled={setIsAudioPlaybackEnabled}
+    />
+    :
+    <ToolBar
+      isTranscriptExpanded={isTranscriptExpanded}
+      setIsTranscriptExpanded={setIsTranscriptExpanded}
+      isEventsPaneExpanded={isEventsPaneExpanded}
+      setIsEventsPaneExpanded={setIsEventsPaneExpanded}
+    />
+
 }
 
 export default BottomToolbar;
