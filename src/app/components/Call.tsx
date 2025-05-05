@@ -3,7 +3,7 @@ import PerlinSphere from "./PerlinNoiseSphere";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { MicOff, Mic, Phone, PhoneOff } from "lucide-react"
-import { Center } from "@react-three/drei";
+import { Center, PerspectiveCamera } from "@react-three/drei";
 import { SessionStatus } from "@/app/types";
 import agentMappings from "../data/agentMappings"
 
@@ -13,6 +13,8 @@ interface CallProps {
     onToggleConnection: () => void;
     isPTTActive: boolean;
     setIsPTTActive: (val: boolean) => void;
+    paused?: boolean;
+    startingScale?: number;
 }
 
 const Call = memo(function Call({
@@ -20,7 +22,9 @@ const Call = memo(function Call({
     sessionStatus,
     onToggleConnection,
     isPTTActive,
-    setIsPTTActive
+    setIsPTTActive,
+    paused = false,
+    startingScale = 1,
 }: CallProps) {
     const containerRef = useRef(null);
 
@@ -44,8 +48,6 @@ const Call = memo(function Call({
         if (agentMappings.hasOwnProperty(agentName.toLowerCase())) {
             setFontColor(agentMappings[agentName.toLowerCase()].fontColor)
             setFilter(agentMappings[agentName.toLowerCase()].filter)
-            console.log("Font color:", agentMappings[agentName.toLowerCase()].fontColor)
-            console.log("Filter color:", agentMappings[agentName.toLowerCase()].filter)
         }
         else {
             setFontColor("")
@@ -57,30 +59,36 @@ const Call = memo(function Call({
         <>
             <div className="items-center justify-center overflow-hidden w-full h-full"
                 style={{
-                    transform: "scale(1)",
+                    transform: `scale(${startingScale})`,
                     position: "absolute",
                     zIndex: 10
                 }}
                 ref={containerRef}
             >
                 <div
-                    className="scaleSpring"
                     style={{
                         ...(filter != "" ? { filter: filter } : {}),
                         height: "90%",
                     }}
                 >
                     <Canvas
+
+                        className="scale-spring"
                         style={{
-                            paddingLeft: "60px",
+                            display: "flex",
+                            justifyContent: "center",
                             height: "100%",
-                            width: "100%"
+                            width: "100%",
+                            transform: `scale(${startingScale})`
                         }}
                     >
+                        <PerspectiveCamera makeDefault position={[-0.6, 0, 10]} />
+
                         <ambientLight intensity={0.3} />
                         <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#ffffff" />
                         <Center>
                             <PerlinSphere
+                                pauseSphere={paused}
                             />
                         </Center>
                         <EffectComposer>

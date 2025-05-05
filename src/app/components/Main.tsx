@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
@@ -37,6 +37,7 @@ function Main({ setUseLegacy }: MainProps) {
         useTranscript();
     const { logClientEvent, logServerEvent } = useEvent();
 
+    const [agentFinished, setAgentFinished] = useState<boolean>(false)
     const [selectedAgentName, setSelectedAgentName] = useState<string>("");
     const [selectedAgentConfigSet, setSelectedAgentConfigSet] =
         useState<AgentConfig[] | null>(null);
@@ -57,6 +58,22 @@ function Main({ setUseLegacy }: MainProps) {
     const [isPTTUserSpeaking, setIsPTTUserSpeaking] = useState<boolean>(false);
     const [isAudioPlaybackEnabled, setIsAudioPlaybackEnabled] =
         useState<boolean>(true);
+
+    const [isMobile, setIsMobile] = useState<boolean>(false)
+
+    useLayoutEffect(() => {
+        if (window) {
+            const handleResize = () => {
+                setIsMobile(window.innerWidth < 300)
+            }
+
+            window.addEventListener('resize', handleResize)
+
+            return () => {
+                window.removeEventListener('resize', handleResize)
+            }
+        }
+    }, [])
 
     const sendClientEvent = (eventObj: any, eventNameSuffix = "") => {
         if (dcRef.current && dcRef.current.readyState === "open") {
@@ -131,6 +148,12 @@ function Main({ setUseLegacy }: MainProps) {
         }
     }, [isPTTActive]);
 
+    useEffect(() => {
+        if (sessionStatus === "DISCONNECTED" || sessionStatus == "CONNECTING") {
+            setAgentFinished(true)
+        }
+    }, [sessionStatus])
+
     const fetchEphemeralKey = async (): Promise<string | null> => {
         logClientEvent({ url: "/session" }, "fetch_session_token_request");
         const tokenResponse = await fetch("/api/session");
@@ -179,7 +202,31 @@ function Main({ setUseLegacy }: MainProps) {
                 logClientEvent({ error: err }, "data_channel.error");
             });
             dc.addEventListener("message", (e: MessageEvent) => {
-                handleServerEventRef.current(JSON.parse(e.data));
+                console.log("Event:", JSON.parse(e.data))
+                try {
+                    // Clear any existing timeout
+                    if (
+                        (JSON.parse(e.data)?.type ?? "") == "output_audio_buffer.started"
+                    ) {
+                        setAgentFinished(false)
+                    }
+                    else if (
+                        (JSON.parse(e.data)?.type ?? "") == "output_audio_buffer.stopped" ||
+                        (JSON.parse(e.data)?.type ?? "") == "conversation.item.truncated"
+                    ) {
+                        // Set agent as not finished when we receive a message
+                        setAgentFinished(true);
+                    }
+                } catch (error) {
+                    console.error(error)
+                    setAgentFinished(true)
+                }
+
+                // Parse and handle the event
+                const eventData = JSON.parse(e.data);
+                handleServerEventRef.current(eventData);
+
+
             });
 
             setDataChannel(dc);
@@ -495,35 +542,48 @@ function Main({ setUseLegacy }: MainProps) {
                     )}
                 </div>
             </div>
-            <div className="flex gap-2" style={{ height: "83%" }}>
+            <div className="flex justify-center gap-2" style={{ height: "83%" }}>
                 <div
                     className="flex items-center justify-center overflow-hidden"
                     style={{
                         height: "100%",
-                        width: isTranscriptExpanded || isEventsPaneExpanded ? "50%" : "100%"
+                        width: (isTranscriptExpanded || isEventsPaneExpanded) && !isMobile ? "50%" : "100%"
                     }}
                 >
-                    <DeviceFrameset device="iPhone X" color="black" zoom={0.79}>
+                    {!isMobile ?
+                        <DeviceFrameset device="iPhone X" color="black" zoom={0.79}>
+                            <Call
+                                agentName={selectedAgentName}
+                                sessionStatus={sessionStatus}
+                                onToggleConnection={onToggleConnection}
+                                isPTTActive={isPTTActive}
+                                setIsPTTActive={setIsPTTActive}
+                                paused={agentFinished}
+                            />
+                        </DeviceFrameset>
+                        :
                         <Call
                             agentName={selectedAgentName}
                             sessionStatus={sessionStatus}
                             onToggleConnection={onToggleConnection}
                             isPTTActive={isPTTActive}
                             setIsPTTActive={setIsPTTActive}
+                            paused={agentFinished}
+                            startingScale={0.85}
                         />
-                    </DeviceFrameset>
+                    }
                 </div>
                 <div
                     className="overflow-hidden"
                     style={{
                         height: "100%",
-                        width: isTranscriptExpanded || isEventsPaneExpanded ? "50%" : "0%",
-                        opacity: isTranscriptExpanded || isEventsPaneExpanded ? 1 : 0
+                        width: (isTranscriptExpanded || isEventsPaneExpanded) && !isMobile ? "50%" : "0%",
+                        opacity: (isTranscriptExpanded || isEventsPaneExpanded) && !isMobile ? 1 : 0
                     }}
                 >
                     <div className="flex flex-col gap-2" style={{ height: "100%" }}>
                         {isTranscriptExpanded ?
-                            <div className="px-2 overflow-hidden relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%" }}>
+                            <div className="px-2 relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%", overflowY: "scroll" }}>
                                 <Transcript
                                     userText={userText}
                                     setUserText={setUserText}

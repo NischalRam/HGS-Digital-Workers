@@ -6,12 +6,43 @@ import { PerlinMaterial, PerlinMaterialImpl } from '../utils/PerlinMaterial';
 // TODO: Find out why the extend is not working from PerlinMaterial.tsx
 extend({ PerlinMaterial })
 
-const PerlinSphere = ({ }) => {
+interface PerlinSphere {
+    pauseSphere?: boolean
+}
+
+const PerlinSphere = ({ pauseSphere = false }: PerlinSphere) => {
     const materialRef = useRef<PerlinMaterialImpl>(null);
+
+    const timeRef = useRef<{
+        value: number;
+        lastTime: number | null;
+        momentum: number;
+    }>({
+        value: 0,
+        lastTime: null,
+        momentum: 0
+    });
 
     useFrame(({ clock }) => {
         if (materialRef.current) {
-            materialRef.current.uTime = clock.elapsedTime / 5;
+            const currentTime = clock.getElapsedTime();
+            const targetMomentum = pauseSphere ? 0 : 1;
+
+            if (timeRef.current.lastTime !== null) {
+                const delta = currentTime - timeRef.current.lastTime;
+
+                const momentumDiff = targetMomentum - timeRef.current.momentum
+                timeRef.current.momentum += momentumDiff *
+                    Math.min(delta * 3, 1)
+
+                if (timeRef.current.momentum > 0.001)
+                    timeRef.current.value += delta * timeRef.current.momentum;
+
+            }
+
+            timeRef.current.lastTime = currentTime;
+
+            materialRef.current.uTime = timeRef.current.value / 5;
         }
     });
 
