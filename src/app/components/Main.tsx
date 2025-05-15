@@ -52,7 +52,7 @@ function Main({ setUseLegacy }: MainProps) {
 
     const [isTranscriptExpanded, setIsTranscriptExanded] = useState<boolean>(false);
     const [isEventsPaneExpanded, setIsEventsPaneExpanded] =
-        useState<boolean>(true);
+        useState<boolean>(false);
     const [userText, setUserText] = useState<string>("");
     const [isPTTActive, setIsPTTActive] = useState<boolean>(false);
     const [isPTTUserSpeaking, setIsPTTUserSpeaking] = useState<boolean>(false);
@@ -562,15 +562,24 @@ function Main({ setUseLegacy }: MainProps) {
                             />
                         </DeviceFrameset>
                         :
-                        <Call
-                            agentName={selectedAgentName}
-                            sessionStatus={sessionStatus}
-                            onToggleConnection={onToggleConnection}
-                            isPTTActive={isPTTActive}
-                            setIsPTTActive={setIsPTTActive}
-                            paused={agentFinished}
-                            startingScale={0.85}
-                        />
+                        <div
+                            className="flex items-center justify-center overflow-hidden"
+                            style={{
+                                maxWidth: "682px"
+                            }}
+                        >
+                            <Call
+                                agentName={selectedAgentName}
+                                sessionStatus={sessionStatus}
+                                onToggleConnection={onToggleConnection}
+                                isPTTActive={isPTTActive}
+                                setIsPTTActive={setIsPTTActive}
+                                paused={agentFinished}
+                                canvasPaddingLeft="6.5vw"
+                                startingScale={0.85}
+                            />
+
+                        </div>
                     }
                 </div>
                 <div

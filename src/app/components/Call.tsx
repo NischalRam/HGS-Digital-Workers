@@ -13,6 +13,7 @@ interface CallProps {
     onToggleConnection: () => void;
     isPTTActive: boolean;
     setIsPTTActive: (val: boolean) => void;
+    canvasPaddingLeft?: string;
     paused?: boolean;
     startingScale?: number;
 }
@@ -23,6 +24,7 @@ const Call = memo(function Call({
     onToggleConnection,
     isPTTActive,
     setIsPTTActive,
+    canvasPaddingLeft = "",
     paused = false,
     startingScale = 1,
 }: CallProps) {
@@ -79,7 +81,8 @@ const Call = memo(function Call({
                             justifyContent: "center",
                             height: "100%",
                             width: "100%",
-                            transform: `scale(${startingScale})`
+                            transform: `scale(${startingScale})`,
+                            ...(canvasPaddingLeft != "" ? { paddingLeft: canvasPaddingLeft } : {})
                         }}
                     >
                         <PerspectiveCamera makeDefault position={[-0.6, 0, 10]} />

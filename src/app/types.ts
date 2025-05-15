@@ -2,6 +2,28 @@ import { PerlinMaterialImpl } from './utils/PerlinMaterial';
 
 export type SessionStatus = "DISCONNECTED" | "CONNECTING" | "CONNECTED";
 
+export type AgentMapping = {
+  fontColor: string;
+  filter: string;
+};
+
+export type AgentMappings = {
+  [key: string]: AgentMapping;
+};
+
+
+export type LandingMappings = {
+  [key: string]: {
+    name: string,
+    description: string,
+    icon: React.ReactElement
+  }
+}
+
+export type VisibleAgents = {
+  names: string[]
+}
+
 export interface ToolParameterProperty {
   type: string;
   description?: string;
