@@ -420,7 +420,7 @@ function LegacyMain({ setUseLegacy }: LegacyMainProps) {
                         />
                     </div>
                     <div>
-                        HGS Digital <span className="text-gray-500">Workers</span>
+                        HGS Digital <span className="text-gray-500">Assistants</span>
                     </div>
                 </div>
                 <div className="flex items-center">
