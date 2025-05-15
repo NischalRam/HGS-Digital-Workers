@@ -33,7 +33,7 @@ const LandingPage = () => {
             />
           </div>
           <div>
-            HGS Digital <span className="text-gray-500">Workers</span>
+            HGS Digital <span className="text-gray-500">Assistants</span>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@ const LandingPage = () => {
       {/* Main content */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="max-w-6xl w-full">
-          <h1 className="text-3xl font-bold text-center mb-8">Select a Digital Worker</h1>
+          <h1 className="text-3xl font-bold text-center mb-8">Select Digital Assistant</h1>
 
           <div className="w-full max-w-6xl mx-auto">
 

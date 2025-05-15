@@ -1,4 +1,4 @@
-# HGS Digital Workers Realtime API Agents Demo
+# HGS Digital Assistants Realtime API Agents Demo
 
 This is a simple demonstration of more advanced, agentic patterns built on top of the Realtime API. In particular, this demonstrates:
 - Sequential agent handoffs according to a defined agent graph (taking inspiration from [OpenAI Swarm](https://github.com/openai/swarm))
