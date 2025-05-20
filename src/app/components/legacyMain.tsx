@@ -409,8 +409,17 @@ function LegacyMain({ setUseLegacy }: LegacyMainProps) {
     return (
         <div className="text-base flex flex-col h-screen bg-gray-100 text-gray-800 relative">
             <div className="p-5 text-lg font-semibold flex justify-between items-center">
-                <div className="flex items-center">
-                    <div onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>
+                <div
+                    className="flex items-center"
+                    onClick={() => {
+                        const url = new URL(window.location.toString())
+                        url.searchParams.delete("agentConfig")
+                        window.location.replace(url.toString())
+                    }}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <div
+                    >
                         <Image
                             src="/HGS-Logomark_Blue.svg"
                             alt="OpenAI Logo"
