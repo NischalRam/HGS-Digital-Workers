@@ -460,8 +460,15 @@ function Main({ setUseLegacy }: MainProps) {
     return (
         <div className="text-base flex flex-col h-screen bg-gray-100 text-gray-800 relative" style={{ overflowY: "hidden" }}>
             <div className="p-5 text-lg font-semibold flex justify-between items-center">
-                <div className="flex items-center">
-                    <div onClick={() => window.location.reload()} style={{ cursor: 'pointer' }}>
+                <div className="flex items-center"
+                    onClick={() => {
+                        const url = new URL(window.location.toString())
+                        url.searchParams.delete("agentConfig")
+                        window.location.replace(url.toString())
+                    }}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <div>
                         <Image
                             src="/HGS-Logomark_Blue.svg"
                             alt="OpenAI Logo"
@@ -475,6 +482,19 @@ function Main({ setUseLegacy }: MainProps) {
                     </div>
                 </div>
                 <div className="flex items-center">
+                    <button
+                        className="bg-black hover:bg-gray-900 text-white py-1 px-3 rounded-lg transition-colors duration-200 text-sm font-medium"
+                        style={{
+                            marginRight: "10px"
+                        }}
+                        onClick={() => {
+                            const url = new URL(window.location.toString())
+                            url.searchParams.delete("agentConfig")
+                            window.location.replace(url.toString())
+                        }}
+                    >
+                        Home
+                    </button>
                     <button
                         className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-lg transition-colors duration-200 text-sm font-medium flex items-center mr-4"
                         onClick={setUseLegacy}
@@ -592,7 +612,7 @@ function Main({ setUseLegacy }: MainProps) {
                 >
                     <div className="flex flex-col gap-2" style={{ height: "100%" }}>
                         {isTranscriptExpanded ?
-                            <div className="px-2 relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%", overflowY: "scroll" }}>
+                            <div className="px-2 relative" style={{ height: isEventsPaneExpanded ? "60%" : "100%" }}>
                                 <Transcript
                                     userText={userText}
                                     setUserText={setUserText}
@@ -601,7 +621,7 @@ function Main({ setUseLegacy }: MainProps) {
                                         sessionStatus === "CONNECTED" &&
                                         dcRef.current?.readyState === "open"
                                     }
-                                    minHeight="100%"
+                                    height="100%"
                                 />
                             </div>
                             : <></>
