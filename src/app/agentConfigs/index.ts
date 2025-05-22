@@ -5,6 +5,7 @@ import simpleExample from "./simpleExample";
 import jarvis from "./jarvis";
 import friday from "./TravelAgent";
 import harmony from "./HRPike";
+import david from "./david"
 
 
 export const allAgentSets: AllAgentConfigsType = {
@@ -14,6 +15,7 @@ export const allAgentSets: AllAgentConfigsType = {
   jarvis,
   friday,
   harmony,
+  david,
 };
 
 export const defaultAgentSetKey = "harmony";
