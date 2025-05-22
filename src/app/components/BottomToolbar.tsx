@@ -1,5 +1,6 @@
 import React from "react";
 import { SessionStatus } from "@/app/types";
+import { useSearchParams } from "next/navigation";
 
 interface SimpleToolbarProps {
   isTranscriptExpanded?: boolean;
@@ -132,23 +133,43 @@ function ToolBar({
   isEventsPaneExpanded,
   setIsEventsPaneExpanded,
 }: SimpleToolbarProps) {
-  return (
-    <div className="p-4 flex flex-row items-center justify-center gap-2">
-      <button
-        onClick={() => setIsTranscriptExpanded(!isTranscriptExpanded)}
-        className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
-        style={{ borderRadius: "0.5rem" }}
-      >
-        {isTranscriptExpanded ? "Disable" : "Enable"} Transcript
-      </button>
+  const searchParams = useSearchParams();
 
-      <button
-        onClick={() => setIsEventsPaneExpanded(!isEventsPaneExpanded)}
-        className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
-        style={{ borderRadius: "0.5rem" }}
-      >
-        {isEventsPaneExpanded ? "Disable" : "Enable"} Events
-      </button>
+  const handleInstructions = () => {
+    const url = new URL(window.location.toString())
+    url.pathname = url.pathname + "instruction"
+    url.searchParams.set("agentConfig", searchParams.get("agentConfig") ?? "none")
+    window.open(url, "_blank")
+  }
+
+  return (
+    <div className="p-4 grid grid-cols-12 items-center gap-2">
+      <div className="col-span-1 flex"></div>
+      <div className="col-span-10 flex flex-row items-center justify-center gap-2">
+        <button
+          onClick={() => setIsTranscriptExpanded(!isTranscriptExpanded)}
+          className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+          style={{ borderRadius: "0.5rem" }}
+        >
+          {isTranscriptExpanded ? "Disable" : "Enable"} Transcript
+        </button>
+        <button
+          onClick={() => setIsEventsPaneExpanded(!isEventsPaneExpanded)}
+          className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+          style={{ borderRadius: "0.5rem", marginRight: "15px" }}
+        >
+          {isEventsPaneExpanded ? "Disable" : "Enable"} Events
+        </button>
+      </div>
+      <div className="col-span-1 flex justify-end">
+        <button
+          onClick={handleInstructions}
+          className="bg-black hover:bg-gray-900 text-white py-2 px-4 rounded-lg transition-colors duration-200 text-sm font-medium"
+          style={{ borderRadius: "0.5rem" }}
+        >
+          Read Me!
+        </button>
+      </div>
     </div>
   )
 }
