@@ -24,6 +24,7 @@ import { createRealtimeConnection } from "../lib/realtimeConnection";
 import { allAgentSets, defaultAgentSetKey } from "@/app/agentConfigs";
 import { DeviceFrameset } from "react-device-frameset";
 import Call from "./Call";
+import agentMappings from "../data/agentMappings";
 
 
 interface MainProps {
@@ -304,7 +305,7 @@ function Main({ setUseLegacy }: MainProps) {
             session: {
                 modalities: ["text", "audio"],
                 instructions,
-                voice: "coral",
+                voice: agentMappings[agentSetKey]?.voice ?? "coral",
                 input_audio_format: "pcm16",
                 output_audio_format: "pcm16",
                 input_audio_transcription: { model: "whisper-1" },

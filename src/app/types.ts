@@ -5,6 +5,7 @@ export type SessionStatus = "DISCONNECTED" | "CONNECTING" | "CONNECTED";
 export type AgentMapping = {
   fontColor: string;
   filter: string;
+  voice?: string;
 };
 
 export type AgentMappings = {

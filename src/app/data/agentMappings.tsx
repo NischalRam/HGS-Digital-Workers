@@ -1,4 +1,4 @@
-import { Calendar, Plane, WalletCards } from "lucide-react";
+import { Calendar, Hospital, Plane, WalletCards } from "lucide-react";
 import React from "react";
 import { AgentMappings, LandingMappings, VisibleAgents } from "../types";
 
@@ -14,6 +14,11 @@ const agentMappings: AgentMappings = {
   "jarvis": {
     "fontColor": "#2A3B8F",
     "filter": ""
+  },
+  "david": {
+    "fontColor": "#28A745",
+    "filter": "hue-rotate(-110deg) brightness(135%) saturate(92%)",
+    "voice": "ash"
   }
 }
 
@@ -35,11 +40,16 @@ const landingMappings: LandingMappings = {
     name: "Jarvis",
     description: "Secure your finances with instant fraud detection and resolution available 24/7.",
     icon: <WalletCards className="w-5 h-5 sm:w-9 sm:h-9 md:w-9 md:h-9 lg:w-10 lg:h-10" size={20} color="#2A3B8F" />
+  },
+  "david": {
+    name: "David",
+    description: "Medical sales with AI-powered insights and customer relationship management.",
+    icon: <Hospital className="w-5 h-5 sm:w-9 sm:h-9 md:w-9 md:h-9 lg:w-10 lg:h-10" size={20} color="#28A745" />
   }
 }
 
 const visibleAgents: VisibleAgents = {
-  names: ["harmony", "friday", "jarvis"]
+  names: ["harmony", "friday", "jarvis", "david"]
 }
 
 export {
