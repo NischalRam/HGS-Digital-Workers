@@ -11,6 +11,28 @@ export type AgentMappings = {
   [key: string]: AgentMapping;
 };
 
+export type TranscriptMessage = {
+  itemId: string;
+  role: string;
+  title: string;
+}
+
+
+export type TranscriptMappings = {
+  [key: string]: TranscriptMessage[]
+}
+
+export type InstructionMappings = {
+  [key: string]: string
+}
+
+export type InstructionTranscriptMappings = {
+  [key: string]: {
+    transcript: TranscriptMessage[];
+    instruction: string;
+  }
+}
+
 
 export type LandingMappings = {
   [key: string]: {
