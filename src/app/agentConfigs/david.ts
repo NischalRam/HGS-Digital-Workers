@@ -1,7 +1,7 @@
 import { AgentConfig, Tool } from "@/app/types";
 import { injectTransferTools } from "./utils";
 
-// Define the n8n tool which calls the API and returns its response
+// Define the n8n tool (no toolLogic inside here)
 const n8nTool: Tool = {
   type: "function" as const,
   name: "n8n",
@@ -79,57 +79,65 @@ const n8nTool: Tool = {
       "found_out_about_our_website",
     ],
     additionalProperties: false,
-  },
-  // This toolLogic function makes the API call to n8n and returns the response
-  toolLogic: async (params: {
-    Primary_reasion_for_365: string;
-    lastly_visited_the_office: string;
-    Upscript: string;
-    FS_or_GCM: string;
-    IP_or_MDI: string;
-    location: string;
-    calibrating: string;
-    best_time: string;
-    preferences_or_expectations: string;
-    insurance_card: string;
-    PASS_program: string;
-    share_healthcare_provider: string;
-    found_out_about_our_website: string;
-  }) => {
-    try {
-      console.log("Sending medical details to n8n:", params);
-      
-      const response = await fetch("https://hgsappliedailabs.app.n8n.cloud/webhook/Ascentia_openai", {
+  }
+  // No toolLogic here!
+};
+
+// Define the implementation logic separately
+const n8nToolLogic = async (params: {
+  Primary_reasion_for_365: string;
+  lastly_visited_the_office: string;
+  Upscript: string;
+  FS_or_GCM: string;
+  IP_or_MDI: string;
+  location: string;
+  calibrating: string;
+  best_time: string;
+  preferences_or_expectations: string;
+  insurance_card: string;
+  PASS_program: string;
+  share_healthcare_provider: string;
+  found_out_about_our_website: string;
+}) => {
+  try {
+    console.log("Sending medical details to n8n:", params);
+
+    const response = await fetch(
+      "https://hgsappliedailabs.app.n8n.cloud/webhook/Ascentia_openai",
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(params),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to call n8n API: ${response.status} ${response.statusText}`);
       }
+    );
 
-      // Always read as text since n8n returns plain text
-      const text = await response.text();
-      console.log("n8n API response (text):", text);
-      return { result: text }; // Wrap text in an object
-
-    } catch (error) {
-      console.error("Error calling n8n API:", error);
-      if (error instanceof Error) {
-        return { error: error.message };
-      } else {
-        return { error: "An unknown error occurred" };
-      }
+    if (!response.ok) {
+      throw new Error(
+        `Failed to call n8n API: ${response.status} ${response.statusText}`
+      );
     }
-  },
+
+    // Always read as text since n8n returns plain text
+    const text = await response.text();
+    console.log("n8n API response (text):", text);
+    return { result: text }; // Wrap text in an object
+
+  } catch (error) {
+    console.error("Error calling n8n API:", error);
+    if (error instanceof Error) {
+      return { error: error.message };
+    } else {
+      return { error: "An unknown error occurred" };
+    }
+  }
 };
 
 const david: AgentConfig = {
   name: "david",
-  publicDescription: "A friendly Digital Technology Ambassador specializing in the Eversense 365 CGM system",
+  publicDescription:
+    "A friendly Digital Technology Ambassador specializing in the Eversense 365 CGM system",
   instructions: `
 # Overview
 You are David, you will collect information from the user , start with Hii I am David, thank you for filling our form , I want to take some extra infomation from you and 
@@ -254,7 +262,7 @@ call the n8n tool at the end to save the information
 `,
   tools: [n8nTool],
   toolLogic: {
-    n8n: n8nTool.toolLogic,
+    n8n: n8nToolLogic, // Connect to the implementation function
   },
 };
 
